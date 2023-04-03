@@ -9,15 +9,19 @@ import {
   TableHead,
   TableRow,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 const Movies = () => {
+  const [isLoading, setLoading] = useState(false);
+
   const [search, setSearch] = useState<string>("");
   const [movies, setMovies] = useState([]);
   const [favorites, setFavorites] = useState<{ id: number; title: string }[]>();
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const result = await fetch(
         `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${search}&page=1&include_adult=false`
       );
@@ -25,6 +29,7 @@ const Movies = () => {
       result.json().then((json) => {
         setMovies(json.results);
       });
+      setLoading(false);
     };
     if (search.length >= 3) {
       fetchData();
@@ -95,40 +100,48 @@ const Movies = () => {
           </Table>
         </TableContainer>
       )}
-      {!!movies.length && (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell align="right">Language</TableCell>
-                <TableCell align="right">Release Date</TableCell>
-                <TableCell align="right">Popularity</TableCell>
-                <TableCell align="right">Favorite</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {movies.map((movie: any) => (
-                <TableRow
-                  key={movie.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {movie.title}
-                  </TableCell>
-                  <TableCell align="right">{movie.original_language}</TableCell>
-                  <TableCell align="right">{movie.release_date}</TableCell>
-                  <TableCell align="right">{movie.popularity}</TableCell>
-                  <TableCell align="right">
-                    <Button onClick={() => setFavorite(movie.id, movie.title)}>
-                      Set favorites
-                    </Button>
-                  </TableCell>
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        !!movies.length && (
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Title</TableCell>
+                  <TableCell align="right">Language</TableCell>
+                  <TableCell align="right">Release Date</TableCell>
+                  <TableCell align="right">Popularity</TableCell>
+                  <TableCell align="right">Favorite</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {movies.map((movie: any) => (
+                  <TableRow
+                    key={movie.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {movie.title}
+                    </TableCell>
+                    <TableCell align="right">
+                      {movie.original_language}
+                    </TableCell>
+                    <TableCell align="right">{movie.release_date}</TableCell>
+                    <TableCell align="right">{movie.popularity}</TableCell>
+                    <TableCell align="right">
+                      <Button
+                        onClick={() => setFavorite(movie.id, movie.title)}
+                      >
+                        Set favorites
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )
       )}
     </Grid>
   );
