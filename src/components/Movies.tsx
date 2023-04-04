@@ -10,6 +10,7 @@ import {
   TableRow,
   Button,
   CircularProgress,
+  TableFooter,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
@@ -18,12 +19,14 @@ const Movies = () => {
 
   const [search, setSearch] = useState<string>("");
   const [movies, setMovies] = useState([]);
+  const [page, setPage] = useState(1);
+
   const [favorites, setFavorites] = useState<{ id: number; title: string }[]>();
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       const result = await fetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${search}&page=1&include_adult=false`
+        `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${search}&page=${page}&include_adult=false`
       );
 
       result.json().then((json) => {
@@ -34,7 +37,7 @@ const Movies = () => {
     if (search.length >= 3) {
       fetchData();
     }
-  }, [search]);
+  }, [search, page]);
 
   useEffect(() => {
     if (localStorage.getItem("favorites") || "" || favorites?.length) {
@@ -139,6 +142,16 @@ const Movies = () => {
                   </TableRow>
                 ))}
               </TableBody>
+              <TableFooter sx={{ width: "100%" }}>
+                <Button
+                  onClick={() => {
+                    page > 1 && setPage(page - 1);
+                  }}
+                >
+                  prev
+                </Button>
+                <Button onClick={() => setPage(page + 1)}>next</Button>
+              </TableFooter>
             </Table>
           </TableContainer>
         )
