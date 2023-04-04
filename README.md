@@ -8,6 +8,7 @@ In the project directory, you can run:
 
 ### `yarn start`
 
+(you will need an api key for the https://developers.themoviedb.org/3/search/search-movies API i store that in a .env file called REACT_APP_API_KEY )
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
