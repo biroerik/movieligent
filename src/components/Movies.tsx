@@ -64,7 +64,6 @@ const Movies = () => {
     }
   };
 
-  console.log(movies);
   return (
     <Grid
       container
