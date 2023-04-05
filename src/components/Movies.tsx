@@ -141,9 +141,9 @@ const Movies = () => {
                   </TableRow>
                 ))}
               </TableBody>
-              <TableFooter sx={{ width: "100%" }}>
+              <TableFooter>
+                {" "}
                 <Button
-                  id="prev"
                   onClick={() => {
                     page > 1 && setPage(page - 1);
                   }}

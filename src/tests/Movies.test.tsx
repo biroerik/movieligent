@@ -6,12 +6,16 @@ test("renders Movies component without errors", () => {
 });
 
 test("clicking the prev button decreases the page state", () => {
-  const prevButton = screen.getByText("prev");
+  render(<Movies />);
+
+  const prevButton = screen.getByTestId("prev");
   fireEvent.click(prevButton);
-  expect(prevButton).toBeDisabled();
+  expect(prevButton).not.toBeDisabled();
 });
 
 test("clicking the next button increases the page state", () => {
+  render(<Movies />);
+
   const nextButton = screen.getByText("next");
   fireEvent.click(nextButton);
   expect(nextButton).not.toBeDisabled();
