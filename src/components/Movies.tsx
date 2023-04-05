@@ -142,8 +142,8 @@ const Movies = () => {
                 ))}
               </TableBody>
               <TableFooter>
-                {" "}
                 <Button
+                  disabled={page === 1}
                   onClick={() => {
                     page > 1 && setPage(page - 1);
                   }}
